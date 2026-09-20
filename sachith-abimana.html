@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sachith Abimana — Controller &amp; Internal Audit Executive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0F1F3D;
+    --navy-deep:#0A1730;
+    --steel:#3F5A7D;
+    --accent:#2F5C94;
+    --accent-bg:#EAF1F9;
+    --paper:#FFFFFF;
+    --tint:#F4F6F9;
+    --rule:#DCE3EC;
+    --text:#1B2431;
+    --muted:#5B6B7D;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--tint);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ max-width:1040px; margin:0 auto; }
+  .icon{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    background:var(--navy-deep);
+    border-bottom:3px solid var(--steel);
+  }
+  .topbar .inner{
+    max-width:1040px; margin:0 auto;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 40px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:12px;
+    color:#FFFFFF; text-decoration:none;
+  }
+  .brand .mono{
+    width:36px; height:36px;
+    background:var(--steel);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Source Serif 4', serif; font-weight:600; font-size:15px;
+  }
+  .brand .name{ font-weight:600; font-size:15px; }
+  .brand .role{ font-size:11.5px; color:#9FB1C6; }
+  nav.pagenav{ display:flex; gap:6px; flex-wrap:wrap; }
+  nav.pagenav button{
+    font-family:'Inter', sans-serif;
+    background:none; border:none; cursor:pointer;
+    color:#C7D3E2; font-size:13.5px; font-weight:500;
+    padding:9px 14px;
+  }
+  nav.pagenav button.active{ color:#FFFFFF; background:rgba(255,255,255,.1); }
+  nav.pagenav button:hover{ color:#FFFFFF; }
+
+  @media (max-width:820px){
+    .topbar .inner{ padding:14px 20px; flex-wrap:wrap; gap:12px; }
+    nav.pagenav{ width:100%; justify-content:flex-start; overflow-x:auto; }
+  }
+
+  /* ---------- page mechanics ---------- */
+  .page{ display:none; animation:fade .35s ease; }
+  .page.active{ display:block; }
+  @keyframes fade{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
+
+  .page-header{
+    background:var(--navy-deep);
+    color:#FFFFFF;
+    padding:40px 40px 34px;
+  }
+  .page-header .eyebrow{ font-size:12.5px; color:#9FB1C6; margin-bottom:8px; }
+  .page-header h1{
+    font-family:'Source Serif 4', serif;
+    font-weight:600;
+    font-size:clamp(28px, 4vw, 38px);
+    margin:0;
+  }
+  .page-header p{ margin:10px 0 0; color:#C7D3E2; font-size:15px; max-width:60ch; }
+
+  .content{ padding:44px 40px 64px; }
+
+  @media (max-width:640px){
+    .page-header{ padding:32px 22px 26px; }
+    .content{ padding:32px 20px 48px; }
+  }
+
+  /* ---------- home hero ---------- */
+  .hero{
+    background:var(--navy-deep);
+    color:#FFFFFF;
+  }
+  .hero .inner{
+    padding:64px 40px 0;
+    display:flex; gap:32px; align-items:center; flex-wrap:wrap;
+  }
+  .avatar{
+    width:100px; height:100px; flex:none;
+    background:var(--steel); color:#FFFFFF;
+    font-family:'Source Serif 4', serif; font-weight:600; font-size:36px;
+    display:flex; align-items:center; justify-content:center;
+    border:2px solid rgba(255,255,255,.25);
+  }
+  .hero h1{
+    font-family:'Source Serif 4', serif; font-weight:600;
+    font-size:clamp(32px, 4.4vw, 46px); margin:0 0 8px;
+  }
+  .hero .role{
+    font-family:'Source Serif 4', serif; font-style:italic; font-weight:500;
+    font-size:18px; color:#D6DEE9; margin:0 0 4px;
+  }
+  .hero .org{ font-size:14px; color:#9FB1C6; }
+  .hero-ctas{ display:flex; gap:14px; padding:26px 40px 34px; flex-wrap:wrap; }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:11px 20px; font-size:13.5px; font-weight:600;
+    text-decoration:none; letter-spacing:.01em; border:1px solid rgba(255,255,255,.4);
+    background:none; cursor:pointer; font-family:'Inter', sans-serif;
+  }
+  .btn.solid{ background:#FFFFFF; color:var(--navy-deep); border-color:#FFFFFF; }
+  .btn.outline{ color:#FFFFFF; }
+  .btn.solid:hover{ background:#E7ECF3; }
+  .btn.outline:hover{ background:rgba(255,255,255,.08); }
+
+  .stats{ display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid rgba(255,255,255,.15); }
+  .stats .stat{ padding:22px 24px; border-right:1px solid rgba(255,255,255,.15); }
+  .stats .stat:last-child{ border-right:none; }
+  .stats .num{ font-family:'Source Serif 4', serif; font-weight:600; font-size:27px; color:#FFFFFF; }
+  .stats .lbl{ font-size:11px; color:#9FB1C6; letter-spacing:.04em; margin-top:2px; }
+
+  @media (max-width:640px){
+    .stats{ grid-template-columns:repeat(2,1fr); }
+    .stats .stat:nth-child(2){ border-right:none; }
+    .hero .inner{ padding:44px 20px 0; }
+    .hero-ctas{ padding:22px 20px 28px; }
+  }
+
+  /* ---------- cards / grids ---------- */
+  .grid3{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .grid2{ display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+  @media (max-width:760px){ .grid3, .grid2{ grid-template-columns:1fr; } }
+
+  .card{
+    background:#FFFFFF; border:1px solid var(--rule);
+    padding:26px 24px; box-shadow:0 1px 3px rgba(15,31,61,.05);
+  }
+  .card .icon-badge{
+    width:44px; height:44px; background:var(--accent-bg); color:var(--accent);
+    display:flex; align-items:center; justify-content:center; margin-bottom:16px;
+  }
+  .card h3{ font-family:'Source Serif 4', serif; font-weight:600; font-size:17px; margin:0 0 8px; color:var(--navy); }
+  .card p{ font-size:14px; color:var(--muted); margin:0; }
+
+  section.block{ margin-bottom:40px; }
+  section.block:last-child{ margin-bottom:0; }
+  section.block h2{
+    font-family:'Source Serif 4', serif; font-weight:600; font-size:22px;
+    margin:0 0 20px; color:var(--navy);
+  }
+  section.block > p.lede{ font-size:15.5px; max-width:66ch; color:var(--text); margin:0 0 22px; }
+
+  /* ---------- timeline ---------- */
+  .timeline{ list-style:none; margin:0; padding:0; border-left:2px solid var(--rule); }
+  .timeline li{ position:relative; padding:0 0 30px 30px; }
+  .timeline li:last-child{ padding-bottom:0; }
+  .timeline li::before{
+    content:""; position:absolute; left:-9px; top:2px;
+    width:14px; height:14px; background:#FFFFFF; border:2px solid var(--navy);
+  }
+  .timeline li.current::before{ background:var(--accent); border-color:var(--accent); }
+  .timeline .row{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .timeline .title{ font-weight:600; font-size:16px; color:var(--navy); }
+  .timeline .badge{
+    font-size:10.5px; font-weight:700; letter-spacing:.04em; color:#FFFFFF;
+    background:var(--accent); padding:2px 8px;
+  }
+  .timeline .org{ font-size:13.5px; color:var(--muted); margin-top:2px; }
+  .timeline .note{ font-size:14.5px; margin-top:10px; max-width:60ch; color:var(--text); }
+  .pillrow{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .pill{
+    font-size:12px; font-weight:500; color:var(--accent);
+    background:var(--accent-bg); padding:5px 11px;
+    display:flex; align-items:center; gap:6px;
+  }
+  .pill .icon{ width:14px; height:14px; }
+
+  /* ---------- services ---------- */
+  .form-wrap{ margin-top:8px; border:1px solid var(--rule); background:var(--tint); padding:4px; }
+  .form-wrap iframe{ display:block; width:100%; height:920px; border:none; }
+  .form-note{ font-size:13px; color:var(--muted); margin-top:12px; }
+
+  /* ---------- credentials ---------- */
+  .cred-card{
+    background:#FFFFFF; border:1px solid var(--rule); padding:26px 24px;
+    box-shadow:0 1px 3px rgba(15,31,61,.05);
+    display:flex; gap:18px; align-items:flex-start;
+  }
+  .cred-card .icon-badge{ width:46px; height:46px; background:var(--accent-bg); color:var(--accent); flex:none; display:flex; align-items:center; justify-content:center; }
+  .cred-card .title{ font-weight:600; font-size:16px; color:var(--navy); }
+  .cred-card .sub{ font-size:13.5px; color:var(--muted); margin-top:2px; }
+  .cred-card .status{
+    display:inline-block; margin-top:10px; font-size:11px; font-weight:700;
+    letter-spacing:.03em; color:var(--accent); border:1px solid var(--accent); padding:3px 9px;
+  }
+  .cred-list{ display:flex; flex-direction:column; gap:16px; }
+
+  /* ---------- contact ---------- */
+  .contact-cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  @media (max-width:760px){ .contact-cards{ grid-template-columns:1fr; } }
+  .contact-card{
+    background:#FFFFFF; border:1px solid var(--rule); padding:26px 22px; text-align:left;
+    box-shadow:0 1px 3px rgba(15,31,61,.05);
+  }
+  .contact-card .icon-badge{ width:44px; height:44px; background:var(--accent-bg); color:var(--accent); display:flex; align-items:center; justify-content:center; margin-bottom:14px; }
+  .contact-card .label{ font-size:11.5px; color:var(--muted); letter-spacing:.04em; text-transform:uppercase; margin-bottom:6px; }
+  .contact-card a{ color:var(--navy); font-weight:600; font-size:15.5px; text-decoration:none; border-bottom:1px solid var(--rule); }
+  .contact-card a:hover{ border-color:var(--navy); }
+  .signoff{
+    margin-top:34px; font-family:'Source Serif 4', serif; font-style:italic; font-size:17px;
+    color:var(--text); max-width:56ch;
+  }
+
+  footer.sitefoot{
+    background:var(--navy); color:#9FB1C6; text-align:center;
+    padding:24px 20px; font-size:12px;
+  }
+
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="inner">
+    <a class="brand" href="#" data-nav="home">
+      <span class="mono">SA</span>
+      <span>
+        <span class="name" style="display:block;">Sachith Abimana</span>
+        <span class="role">Controller &amp; Internal Audit Executive</span>
+      </span>
+    </a>
+    <nav class="pagenav">
+      <button data-nav="home" class="active">Home</button>
+      <button data-nav="experience">Experience</button>
+      <button data-nav="services">Services</button>
+      <button data-nav="credentials">Credentials</button>
+      <button data-nav="contact">Contact</button>
+    </nav>
+  </div>
+</div>
+
+<!-- ============ HOME ============ -->
+<section class="page active" id="page-home">
+  <div class="hero">
+    <div class="inner">
+      <div class="avatar">SA</div>
+      <div>
+        <h1>Sachith Abimana</h1>
+        <p class="role">Controller &amp; Internal Audit Executive</p>
+        <p class="org">Abans Environmental Services (Pvt) Ltd · Sri Lanka</p>
+      </div>
+    </div>
+    <div class="hero-ctas">
+      <button class="btn solid" data-nav="services">Freelance services</button>
+      <button class="btn outline" data-nav="contact">Get in touch</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="num">7+</div><div class="lbl">YEARS EXPERIENCE</div></div>
+      <div class="stat"><div class="num">5</div><div class="lbl">ROLES HELD</div></div>
+      <div class="stat"><div class="num">3</div><div class="lbl">CREDENTIALS</div></div>
+      <div class="stat"><div class="num">4</div><div class="lbl">SERVICES OFFERED</div></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="content">
+      <section class="block">
+        <h2>About</h2>
+        <p class="lede">Sachith is an Internal Audit Executive at Abans Environmental Services, with hands-on experience across external and internal audits, tax compliance, and financial reporting. Alongside that role, he takes on freelance work helping companies prepare financial statements, monthly accounts, budgets, and forecasts — often for funding or loan applications.</p>
+        <p class="lede">Over more than seven years in the field, he has built practical knowledge across internal audit, accounting systems, and tax filings, working with both private institutions and government entities.</p>
+      </section>
+
+      <section class="block">
+        <h2>What he does</h2>
+        <div class="grid3">
+          <div class="card">
+            <div class="icon-badge"><svg class="icon" viewBox="0 0 24 24"><path d="M9 11l2 2 4-4"/><rect x="3" y="4" width="18" height="16" rx="1"/></svg></div>
+            <h3>Audit &amp; Compliance</h3>
+            <p>Internal and external audits, control reviews, and tax compliance.</p>
+          </div>
+          <div class="card">
+            <div class="icon-badge"><svg class="icon" viewBox="0 0 24 24"><path d="M7 3h10v18H7z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></div>
+            <h3>Financial Reporting</h3>
+            <p>Financial statements, monthly accounts, and performance analysis.</p>
+          </div>
+          <div class="card">
+            <div class="icon-badge"><svg class="icon" viewBox="0 0 24 24"><path d="M3 17l5-5 4 4 8-8"/><path d="M14 8h6v6"/></svg></div>
+            <h3>Freelance Support</h3>
+            <p>Budgeting, forecasting, and tax filing for independent clients.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EXPERIENCE ============ -->
+<section class="page" id="page-experience">
+  <div class="page-header">
+    <div class="eyebrow">Career history</div>
+    <h1>Experience</h1>
+    <p>Seven-plus years across internal audit, accounting systems, and tax filings — spanning private institutions and government entities.</p>
+  </div>
+  <div class="wrap">
+    <div class="content">
+      <ul class="timeline">
+        <li class="current">
+          <div class="row"><span class="title">Internal Audit Executive</span><span class="badge">CURRENT</span></div>
+          <div class="org">Abans Environmental Services (AES)</div>
+          <div class="note">Fuel management controls, payroll monitoring, petty cash review, customer code creation, and monthly performance analysis.</div>
+          <div class="pillrow">
+            <span class="pill"><svg class="icon" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14"/></svg>Fuel controls</span>
+            <span class="pill"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 9h18"/></svg>Payroll monitoring</span>
+            <span class="pill"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>Petty cash review</span>
+            <span class="pill"><svg class="icon" viewBox="0 0 24 24"><path d="M4 19V5a2 2 0 012-2h8l6 6v10a2 2 0 01-2 2H6a2 2 0 01-2-2z"/></svg>Customer codes</span>
+            <span class="pill"><svg class="icon" viewBox="0 0 24 24"><path d="M4 19h16M7 15l3-4 3 3 4-6"/></svg>Monthly analysis</span>
+          </div>
+        </li>
+        <li>
+          <div class="row"><span class="title">Senior Audit Executive</span></div>
+          <div class="org">GMS</div>
+        </li>
+        <li>
+          <div class="row"><span class="title">Internal Audit Assistant</span></div>
+          <div class="org">Ceylon-German Technical Institute</div>
+        </li>
+        <li>
+          <div class="row"><span class="title">Accounts Assistant</span></div>
+          <div class="org">Samurdhi Bank</div>
+        </li>
+        <li>
+          <div class="row"><span class="title">Early career</span></div>
+          <div class="org">Ceylinco Life Insurance</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVICES ============ -->
+<section class="page" id="page-services">
+  <div class="page-header">
+    <div class="eyebrow">Freelance financial services</div>
+    <h1>Services</h1>
+    <p>Outside of his role at Abans, Sachith takes on freelance engagements for individuals and small businesses.</p>
+  </div>
+  <div class="wrap">
+    <div class="content">
+      <div class="grid2" style="margin-bottom:36px;">
+        <div class="card">
+          <div class="icon-badge"><svg class="icon" viewBox="0 0 24 24"><path d="M7 3h10v18H7z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></div>
+          <h3>Financial Statement Preparation</h3>
+          <p>Year-end and interim financial statements.</p>
+        </div>
+        <div class="card">
+          <div class="icon-badge"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="1"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></div>
+          <h3>Monthly Accounts</h3>
+          <p>Ongoing bookkeeping and month-end close.</p>
+        </div>
+        <div class="card">
+          <div class="icon-badge"><svg class="icon" viewBox="0 0 24 24"><path d="M4 19h16M7 15l3-4 3 3 4-6"/></svg></div>
+          <h3>Budgeting &amp; Forecasting</h3>
+          <p>Including documentation for funding and loan applications.</p>
+        </div>
+        <div class="card">
+          <div class="icon-badge"><svg class="icon" viewBox="0 0 24 24"><path d="M6 2h9l3 3v17H6z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></div>
+          <h3>Personal Income Tax Return Filing</h3>
+          <p>Individual tax return preparation and filing.</p>
+        </div>
+      </div>
+
+      <section class="block">
+        <h2>Send an inquiry</h2>
+        <div class="form-wrap">
+          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdSfY8Ge-TIvTITr7h9EkwxSDC0Fi2iD1zNzcAaN_j-VvwUzw/viewform?embedded=true" title="Freelance Financial Services Inquiry Form">Loading…</iframe>
+        </div>
+        <p class="form-note">Prefer to reach out directly? Contact details are on the Contact page — email, phone, and WhatsApp all work.</p>
+      </section>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CREDENTIALS ============ -->
+<section class="page" id="page-credentials">
+  <div class="page-header">
+    <div class="eyebrow">Education &amp; qualifications</div>
+    <h1>Credentials</h1>
+    <p>Academic background and professional memberships.</p>
+  </div>
+  <div class="wrap">
+    <div class="content">
+      <div class="cred-list">
+        <div class="cred-card">
+          <div class="icon-badge"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M5 10v5c0 1.7 3.1 3 7 3s7-1.3 7-3v-5"/></svg></div>
+          <div>
+            <div class="title">BSc in Applied Accounting</div>
+            <div class="sub">SAB Campus (CA Sri Lanka)</div>
+            <span class="status">COMPLETED</span>
+          </div>
+        </div>
+        <div class="cred-card">
+          <div class="icon-badge"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M8.5 12.5L6 21l6-3 6 3-2.5-8.5"/></svg></div>
+          <div>
+            <div class="title">Chartered Accountancy, Corporate Level</div>
+            <div class="sub">CA Sri Lanka</div>
+            <span class="status">FINAL LEVEL IN PROGRESS</span>
+          </div>
+        </div>
+        <div class="cred-card">
+          <div class="icon-badge"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+          <div>
+            <div class="title">Member, AAT Sri Lanka</div>
+            <div class="sub">Association of Accounting Technicians</div>
+            <span class="status">ACTIVE</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="page" id="page-contact">
+  <div class="page-header">
+    <div class="eyebrow">Let's talk</div>
+    <h1>Contact</h1>
+    <p>Open to inquiries on audit support, financial reporting, and freelance engagements.</p>
+  </div>
+  <div class="wrap">
+    <div class="content">
+      <div class="contact-cards">
+        <div class="contact-card">
+          <div class="icon-badge"><svg class="icon" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3-8.7A2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .3 2 .7 3a2 2 0 01-.4 2.1L8 10.3a16 16 0 006 6l1.5-1.5a2 2 0 012.1-.4c1 .4 2 .6 3 .7a2 2 0 011.7 2z"/></svg></div>
+          <div class="label">Phone</div>
+          <a href="tel:+94773011420">+94 77 301 1420</a>
+        </div>
+        <div class="contact-card">
+          <div class="icon-badge"><svg class="icon" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6l10 7 10-7"/></svg></div>
+          <div class="label">Email</div>
+          <a href="mailto:abimanas96@gmail.com">abimanas96@gmail.com</a>
+        </div>
+        <div class="contact-card">
+          <div class="icon-badge"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 10v7M7 7v.01M11 17v-4a2 2 0 014 0v4M11 13v4"/></svg></div>
+          <div class="label">LinkedIn</div>
+          <a href="https://www.linkedin.com/in/sachith-abimana-b575401a9/" target="_blank" rel="noopener">sachith-abimana</a>
+        </div>
+      </div>
+      <p class="signoff">"Always focused on accuracy, compliance, and efficiency."</p>
+    </div>
+  </div>
+</section>
+
+<footer class="sitefoot">Sachith Abimana — Controller &amp; Internal Audit Executive</footer>
+
+<script>
+  const pages = document.querySelectorAll('.page');
+  const navButtons = document.querySelectorAll('[data-nav]');
+  function goTo(name){
+    pages.forEach(p => p.classList.toggle('active', p.id === 'page-' + name));
+    document.querySelectorAll('nav.pagenav button').forEach(b => b.classList.toggle('active', b.dataset.nav === name));
+    window.scrollTo({top:0, behavior:'instant'});
+  }
+  navButtons.forEach(el => el.addEventListener('click', (e) => {
+    e.preventDefault();
+    goTo(el.dataset.nav);
+  }));
+</script>
+
+</body>
+</html>
